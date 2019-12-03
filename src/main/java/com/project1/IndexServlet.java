@@ -36,8 +36,8 @@ public class IndexServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		Query query = new Query("Tweet").addSort("Time", Query.SortDirection.DESCENDING);
-		List<Entity> tweets = ds.prepare(query).asList(FetchOptions.Builder.withLimit(5));
+		Query query = new Query("Tweet").addSort("time", Query.SortDirection.DESCENDING);
+		List<Entity> tweets = ds.prepare(query).asList(FetchOptions.Builder.withLimit(50));
 		request.setAttribute("tweets", tweets);
 
 		request.getRequestDispatcher("index.jsp").forward(request, response);

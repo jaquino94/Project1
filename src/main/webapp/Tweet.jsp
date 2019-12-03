@@ -12,8 +12,10 @@
 <body>
 	<script>
 		function statusChangeCallback(response){
-			console.log("LOGGED IN");
 			if ( response.status === 'connected' ) {
+				FB.api('/me', function(response) {
+					document.getElementById("username").value = response.name;
+				});
 				postMessageTest();
 			}
 		}
@@ -45,7 +47,7 @@
 		window.fbAsyncInit = function() {
 				FB.init({
 					appId      : '707554869732964',
-					cookie     : false,
+					cookie     : true,
 					xfbml      : true,
 					version    : 'v4.0'
 				});
@@ -86,9 +88,10 @@
 		<form method="post" action="tweets">
 			<div class="form-group">
 					<b>Link to share:</b> <input id="link" type="text" name="link" value=""><br>
+					<input type="hidden" id="username" name="name" value="">
 			</div>
 			<div class="form-group">
-					<b>Message:</b> <input id="message" type="text" name="message" value=""><br>
+					<b>Message:</b><textarea id="message" name="message" value="" maxlength="144" class="form-control" id="exampleFormControlTextarea3" rows="3"></textarea>
 			</div>
 				<button type="submit" class="btn btn-default" onclick="checkLoginState()">Submit</button>
 		</form>

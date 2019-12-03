@@ -22,21 +22,31 @@
 	</nav>
 	
 	<div class="container">
-		<h2>Recent tweets: </h2>
-		<%@ page import="com.google.appengine.api.datastore.Entity" %>
+		<%@ page import="com.google.appengine.api.datastore.*" %>
 		<%@ page import="java.util.List" %>
 		<% 
-			List<Entity> tweets = (List)request.getAttribute("tweets");	
-			if ( tweets.isEmpty() ) {
-				out.print("<h3>Currently no tweets</h3>");
-			} else {
-				for( Entity tweet: tweets ){
-					String message = (String) tweet.getProperty("message");
-					String tweet_id = (String)tweet.getProperty("key");
-					out.print("<h4><a href='/view_tweet.jsp?tweet_id=" + tweet_id + "'>" + message + "</a></h4>");
+			String tweet_id = request.getParameter("tweet_id");
+			Entity tweet = null;
+
+			if ( tweet_id != null ) {
+				DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+				Key key = KeyFactory.stringToKey(tweet_id);
+
+				try {
+					tweet = ds.get(key);
+				} catch (EntityNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NullPointerException e) {
+					e.printStackTrace();
 				}
+
+				int count = (Integer)tweet.getProperty("count");
+				count++;
+				tweet.setProperty("count", count);
 			}
 		%>
+		
 	</div>
   </body>
 </html>

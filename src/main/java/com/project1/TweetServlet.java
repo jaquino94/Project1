@@ -4,8 +4,6 @@ import javax.servlet.ServletException;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,10 +42,24 @@ public class TweetServlet extends HttpServlet {
     
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity tweet = new Entity("Tweet");
-    tweet.setProperty("Message", request.getParameter("message"));
-    tweet.setProperty("Shared URL", request.getParameter("link"));
-    tweet.setProperty("Time", new Date());
+    if ( request.getParameter("name") != "") {
+		tweet.setProperty("username", request.getParameter("name"));
+    } else {
+		tweet.setProperty("username", "Anonymous");
+    }
+    tweet.setProperty("message", request.getParameter("message"));
+    tweet.setProperty("url", request.getParameter("link"));
+    tweet.setProperty("time", new Date());
+    tweet.setProperty("views", 0);
     ds.put(tweet);
+    try {
+		ds.get(tweet.getKey()).setProperty("key", KeyFactory.keyToString(tweet.getKey()));
+	} catch (EntityNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    ds.put(tweet);
+
 
     request.getRequestDispatcher("Tweet.jsp").forward(request, response);
 
