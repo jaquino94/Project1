@@ -24,9 +24,8 @@
 			if ( document.getElementById('link').value !== '') {
 				FB.ui(
 					{
-						method: 'share',
-						href: document.getElementById('link').value,
-						quote: document.getElementById('message').value,
+						method: 'send',
+						link: document.getElementById('link').value,
 						redirect_uri: 'https://apps.facebook.com/707554869732964',
 					},
 					function(response) {
@@ -79,7 +78,7 @@
 			</div>
 			<ul class="nav navbar-nav">
 				<li><a href="/tweets">Make a 'tweet'</a></li>
-				<li><a href="#">Send a 'tweet' to a friend</a></li>
+				<li><a href="/TrendingTweets">Trending tweets</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -93,7 +92,8 @@
 			<div class="form-group">
 					<b>Message:</b><textarea id="message" name="message" value="" maxlength="144" class="form-control" id="exampleFormControlTextarea3" rows="3"></textarea>
 			</div>
-				<button type="submit" class="btn btn-default" onclick="checkLoginState()">Submit</button>
+				<button type="submit" class="btn btn-default">Send tweet</button>
+				<button type="submit" class="btn btn-default" onclick="checkLoginState()">Share with a friend</button>
 		</form>
 	</div>
 	</body>

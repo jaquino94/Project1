@@ -27,4 +27,14 @@
 		<servlet-name>TweetServlet</servlet-name>
 		<url-pattern>/tweets</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+  	<servlet-name>TrendingTweets</servlet-name>
+  	<servlet-class>TrendingTweets</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+		<servlet-name>TrendingTweets</servlet-name>
+		<url-pattern>/TrendingTweets</url-pattern>
+  </servlet-mapping>
 </web-app>

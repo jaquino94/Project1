@@ -1,31 +1,34 @@
 package com.project1;
 
-
-import java.util.List;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.appengine.api.datastore.*;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query;
 
 /**
- * Servlet implementation class IndexServlet
+ * Servlet implementation class TrendingTweets
  */
 @WebServlet(
-		name = "IndexServlet",
-		urlPatterns = {"/"}
+		name="TrendingTweets",
+		urlPatterns= {"/TrendingTweets"}
 )
-public class IndexServlet extends HttpServlet {
-	private static final long serialVersionUID = 2L;
+public class TrendingTweets extends HttpServlet {
+	private static final long serialVersionUID = 3L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public IndexServlet() {
+    public TrendingTweets() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,11 +39,11 @@ public class IndexServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		Query query = new Query("Tweet").addSort("time", Query.SortDirection.DESCENDING);
-		List<Entity> tweets = ds.prepare(query).asList(FetchOptions.Builder.withChunkSize(500));
-		request.setAttribute("tweets", tweets);
+		Query query = new Query("Tweet").addSort("views", Query.SortDirection.DESCENDING);
+		List<Entity> tweets = ds.prepare(query).asList(FetchOptions.Builder.withLimit(50));
 
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+		request.setAttribute("tweets", tweets);
+		request.getRequestDispatcher("trending_tweets.jsp").forward(request, response);
 	}
 
 	/**

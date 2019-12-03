@@ -42,7 +42,7 @@ public class TweetServlet extends HttpServlet {
     
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity tweet = new Entity("Tweet");
-    if ( request.getParameter("name") != "") {
+    if ( request.getParameter("name") != null ) {
 		tweet.setProperty("username", request.getParameter("name"));
     } else {
 		tweet.setProperty("username", "Anonymous");
@@ -52,14 +52,8 @@ public class TweetServlet extends HttpServlet {
     tweet.setProperty("time", new Date());
     tweet.setProperty("views", 0);
     ds.put(tweet);
-    try {
-		ds.get(tweet.getKey()).setProperty("key", KeyFactory.keyToString(tweet.getKey()));
-	} catch (EntityNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+    tweet.setProperty("key", KeyFactory.keyToString(tweet.getKey()));
     ds.put(tweet);
-
 
     request.getRequestDispatcher("Tweet.jsp").forward(request, response);
 

@@ -28,24 +28,23 @@
 			String tweet_id = request.getParameter("tweet_id");
 			Entity tweet = null;
 
-			if ( tweet_id != null ) {
+			if ( tweet_id == null ) {
+				out.println("<H1> TWEET DOES NOT EXIST</H1>");
+			} else {
 				DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 				Key key = KeyFactory.stringToKey(tweet_id);
+				tweet = ds.get(key);
 
-				try {
-					tweet = ds.get(key);
-				} catch (EntityNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NullPointerException e) {
-					e.printStackTrace();
-				}
-
-				int count = (Integer)tweet.getProperty("count");
-				count++;
-				tweet.setProperty("count", count);
+				long count = (Long)tweet.getProperty("views");
+				count += 1;
+				tweet.setProperty("views", count);
+				ds.put(tweet);
 			}
 		%>
+		
+		<h3> <%= tweet.getProperty("message") %></h3>
+		<h3> Shared media: <a href=<%= tweet.getProperty("url") %>><%= tweet.getProperty("url")%></a></h3>
+		<h4> - <%= tweet.getProperty("username") %></h4>
 		
 	</div>
   </body>
